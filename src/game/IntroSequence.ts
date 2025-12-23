@@ -173,6 +173,9 @@ export class IntroSequence {
         // Check for interaction/audio start
         let delay = 0;
         if (!(window as any).hasInteracted) {
+            // Unlock Audio Globally (Mobile)
+            if ((window as any).unlockAudio) (window as any).unlockAudio();
+
             if ((window as any).playAudioEvent) (window as any).playAudioEvent('init');
             (window as any).hasInteracted = true;
             delay = 3; // 3s delay if this is the first interaction
