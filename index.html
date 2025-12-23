@@ -1401,7 +1401,11 @@
                 vid.preload = 'auto';
                 vid.muted = true;
                 vid.playsInline = true;
-                vid.style.display = 'none';
+                // Fix: Do not use display: none, as it can prevent playback on some mobile browsers
+                vid.style.position = 'absolute';
+                vid.style.top = '-9999px';
+                vid.style.opacity = '0';
+                vid.style.pointerEvents = 'none';
                 document.body.appendChild(vid);
                 
                 // We consider it "loaded" enough when it can play through or has enough data

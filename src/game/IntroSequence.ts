@@ -181,14 +181,12 @@ export class IntroSequence {
         this.started = true;
 
         // Check for interaction/audio start
-        let delay = 0;
         if (!(window as any).hasInteracted) {
             // Unlock Audio Globally (Mobile)
             if ((window as any).unlockAudio) (window as any).unlockAudio();
 
             if ((window as any).playAudioEvent) (window as any).playAudioEvent('init');
             (window as any).hasInteracted = true;
-            delay = 3; // 3s delay if this is the first interaction
         }
 
         if ((window as any).playAudioEvent) (window as any).playAudioEvent('intro_start');
@@ -203,11 +201,8 @@ export class IntroSequence {
             }});
         }
 
-        if (delay > 0) {
-            gsap.delayedCall(delay, () => this.setupIntro());
-        } else {
-            this.setupIntro();
-        }
+        // Start IMMEDIATELY to ensure mobile autoplay works (synchronous with user event)
+        this.setupIntro();
     }
 
     setupIntro() {
