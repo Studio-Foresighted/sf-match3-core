@@ -77,8 +77,9 @@ export class IntroSequence {
         Assets.add({ alias: 'loopVideo', src: '/assets/video/start-screen-loop-bg.mp4' });
         Assets.add({ alias: 'startButton', src: '/assets/start-button.png' });
         Assets.add({ alias: 'logo', src: '/assets/artworx-alchemy-trans.png' });
+        Assets.add({ alias: 'character', src: '/assets/red-alchemist-jump-skirt-nowhite5.png' }); // Preload character
 
-        const assetsToLoad = ['introVideo', 'loopVideo', 'startButton', 'logo'];
+        const assetsToLoad = ['introVideo', 'loopVideo', 'startButton', 'logo', 'character'];
         
         // Load them
         await Assets.load(assetsToLoad, (progress) => {

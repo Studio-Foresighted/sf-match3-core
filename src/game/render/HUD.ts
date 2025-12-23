@@ -43,8 +43,8 @@ export class HUD {
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
             // We want the logo to be at screen Y = 20px, Screen X = 20px (Top Left)
-            const targetScreenY = 20;
-            const targetScreenX = 20;
+            const targetScreenY = -5;
+            const targetScreenX = 15;
             
             const localY = (targetScreenY - stageY) / scale;
             const localX = (targetScreenX - stageX) / scale;

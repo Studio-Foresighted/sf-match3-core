@@ -314,7 +314,7 @@
         letter-spacing: 1px;
         margin-top: 2.5em;
         margin-bottom: 0;
-        font-family: "Bangers", cursive;
+        font-family: "Lilita One", cursive; /* Changed from Bangers to match Click to Start */
         color: white;
       }
 
@@ -383,7 +383,7 @@
 
       #cs-select-btn {
         padding: 8px 20px;
-        font-family: "Bangers", cursive;
+        font-family: "Lilita One", cursive; /* Changed from Bangers to match Click to Start */
         font-size: 20px;
         color: #d32f2f;
         background: #fff;
@@ -1033,18 +1033,16 @@
 
         /* Avatar: Hug Top Right */
         #sc-character-container {
-            top: 60px; /* Below menu button (approx) */
-            right: -40px; /* Hug right edge */
-            bottom: auto; /* Reset bottom */
-            height: 180px; /* Smaller height */
-            transform: scale(0.8); /* Scale down slightly */
+            top: 0; /* Below menu button (approx) */
+            right: 0; /* Hug right edge */
+            transform: scale(0.7); /* Scale down slightly */
             transform-origin: top right;
         }
 
         .sc-menu-btn {
           transform: scale(1.0) skewX(-9deg);
-          top: 10px;
-          right: 10px;
+          top: 0;
+          right: 5px;
           z-index: 6001; /* Ensure above everything */
         }
       }
@@ -1116,6 +1114,12 @@
         <img src="/assets/menu-icon.png" class="sc-menu-icon">
       </div>
 
+        <!-- Character Video -->
+        <div id="sc-character-container">
+          <video id="sc-video-1" class="sc-video-layer active" muted playsinline></video>
+          <video id="sc-video-2" class="sc-video-layer" muted playsinline></video>
+        </div>
+
       <div class="sc-top-bar">
         <!-- Star Rating Bar -->
         <div class="sc-star-bar">
@@ -1185,12 +1189,6 @@
               </g>
             </svg>
           </div>
-        </div>
-
-        <!-- Character Video -->
-        <div id="sc-character-container">
-          <video id="sc-video-1" class="sc-video-layer active" muted playsinline></video>
-          <video id="sc-video-2" class="sc-video-layer" muted playsinline></video>
         </div>
 
         <!-- Score: Top Left -->
