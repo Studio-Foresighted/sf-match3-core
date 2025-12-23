@@ -102,4 +102,8 @@ export class Game {
             (window as any).updateStarRating(0);
         }
     }
+
+    onResize(stageY: number, scale: number) {
+        this.hud.updateLogoPosition(stageY, scale);
+    }
 }

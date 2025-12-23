@@ -64,6 +64,11 @@ async function init() {
             const visualCenterY = (BOARD_SIZE - HEADER_HEIGHT) / 2;
             app.stage.y = (height / 2) - (visualCenterY * scale);
 
+            // Update Logo Position
+            if (game) {
+                game.onResize(app.stage.y, scale);
+            }
+
             // Update HTML HUD Layout to match board position
             if ((window as any).updateHUDLayout) {
                 (window as any).updateHUDLayout(

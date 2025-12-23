@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Artworx Alchemy</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -131,40 +131,7 @@
       }
 
       /* Mobile: Top Right */
-      @media (max-width: 768px) {
-        .toggle-sound {
-          top: 20px;
-          right: 20px;
-          transform: scale(1);
-        }
-        
-        /* Mobile Video Adjustment */
-        #sc-intro-video {
-          object-fit: cover;
-          width: 100%;
-          height: 100%;
-        }
-
-        /* Mobile UI Adjustments */
-        .sc-stat-box-score, .sc-stat-box-moves {
-          transform: skewX(-9deg) scale(0.75); /* 50% of the original 1.5 scale */
-          bottom: 10px;
-        }
-        .sc-stat-box-score { left: -10px; }
-        .sc-stat-box-moves { right: -10px; }
-
-        .sc-star-bar {
-          transform: skewX(-9deg) scale(1.8); /* Smaller on mobile */
-          bottom: 100px; /* Adjusted for smaller score box */
-          left: -10px;
-        }
-
-        .sc-menu-btn {
-          transform: scale(1.2) skewX(-9deg);
-          top: 10px;
-          right: 10px;
-        }
-      }
+      /* MOVED TO BOTTOM OF STYLE BLOCK FOR SPECIFICITY */
 
       /* Desktop: Below Video (Positioned via JS) */
       @media (min-width: 769px) {
@@ -1004,6 +971,59 @@
         color: #fff;
         text-shadow: 2px 2px 0 #000;
         margin-left: 8px; /* Optical center */
+      }
+
+      /* Mobile: Top Right - MOVED TO BOTTOM FOR SPECIFICITY */
+      @media (max-width: 768px) {
+        .toggle-sound {
+          top: 20px;
+          right: 20px;
+          transform: scale(1);
+        }
+        
+        /* Mobile Video Adjustment */
+        #sc-intro-video {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+        }
+
+        /* Mobile UI Adjustments */
+        .sc-stat-box-score, .sc-stat-box-moves {
+          transform: skewX(-9deg); /* Remove scale, keep skew */
+          width: 30%; /* Reduced from 44% to 30% (approx half of original visual weight) */
+          min-width: auto;
+          height: 35px;
+          bottom: 10px;
+          padding-left: 15px;
+          padding-right: 5px;
+        }
+        .sc-stat-box-score { left: 2%; }
+        .sc-stat-box-moves { right: 2%; }
+
+        .sc-stat-text {
+          font-size: 14px; /* Slightly smaller */
+          line-height: 35px;
+          margin-left: 5px;
+        }
+
+        .sc-stat-icon {
+          height: 30px; /* Smaller icon */
+          top: -2px;
+          left: -10px;
+        }
+
+        .sc-star-bar {
+          transform: skewX(-9deg) scale(1.0); /* Much smaller (was 1.8) */
+          bottom: 60px; /* Closer to score bars */
+          left: 10px; /* Align better */
+        }
+
+        .sc-menu-btn {
+          transform: scale(1.0) skewX(-9deg); /* Smaller menu button */
+          top: 10px;
+          right: 10px;
+        }
       }
 
     </style>

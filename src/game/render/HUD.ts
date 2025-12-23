@@ -22,7 +22,7 @@ export class HUD {
         this.logoSprite = new Sprite(texture);
         this.logoSprite.anchor.set(0.5, 1); // Anchor at bottom-center
         this.logoSprite.x = (8 * 140) / 2;
-        this.logoSprite.y = -40; // Position it slightly above the board
+        this.logoSprite.y = -40; // Default desktop position
         
         // Scale logo to fit nicely (max width 80% of board, max height 300px)
         const maxWidth = (8 * 140) * 0.8;
@@ -35,6 +35,26 @@ export class HUD {
         this.logoSprite.scale.set(scale);
 
         this.container.addChild(this.logoSprite);
+    }
+
+    updateLogoPosition(stageY: number, scale: number) {
+        if (!this.logoSprite) return;
+
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+            // We want the logo to be at screen Y = 20px
+            // ScreenY = stageY + (LocalY * scale)
+            // LocalY = (ScreenY - stageY) / scale
+            const targetScreenY = 20;
+            const localY = (targetScreenY - stageY) / scale;
+            
+            this.logoSprite.y = localY;
+            this.logoSprite.anchor.set(0.5, 0); // Anchor top-center
+        } else {
+            // Reset to desktop default
+            this.logoSprite.y = -40;
+            this.logoSprite.anchor.set(0.5, 1); // Anchor bottom-center
+        }
     }
 
     updateScore(points: number) {

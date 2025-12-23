@@ -492,7 +492,13 @@ export class IntroSequence {
             const baseScale = maxLogoWidth / this.logoSprite.texture.width;
             this.logoSprite.scale.set(baseScale * this.logoScaleMultiplier);
             this.logoSprite.x = this.app.screen.width / 2;
-            this.logoSprite.y = this.app.screen.height / 2;
+            
+            if (isMobile) {
+                // Hug the top on mobile
+                this.logoSprite.y = (this.logoSprite.height / 2) + 20; 
+            } else {
+                this.logoSprite.y = this.app.screen.height / 2;
+            }
         }
 
         if (this.clickToStartText) {
