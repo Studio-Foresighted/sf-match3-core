@@ -16,6 +16,7 @@ export class IntroSequence {
     private logoSprite: Sprite | null = null;
     private clickToStartText: Text | null = null;
     private logoScaleMultiplier: number = 1;
+    private started: boolean = false;
 
     constructor(app: Application, onComplete: () => void) {
         this.app = app;
@@ -151,7 +152,12 @@ export class IntroSequence {
         
         gsap.to(this.clickToStartText, { alpha: 1, duration: 1, delay: 1, yoyo: true, repeat: -1 });
 
-        // Interaction to start video
+        // Make text interactive for mobile touch
+        this.clickToStartText.eventMode = 'static';
+        this.clickToStartText.cursor = 'pointer';
+        this.clickToStartText.once('pointerdown', () => this.startVideoSequence());
+
+        // Interaction to start video (background/container)
         this.container.eventMode = 'static';
         this.container.cursor = 'pointer';
         this.container.once('pointerdown', () => this.startVideoSequence());
@@ -160,6 +166,9 @@ export class IntroSequence {
     }
 
     startVideoSequence() {
+        if (this.started) return;
+        this.started = true;
+
         // Check for interaction/audio start
         let delay = 0;
         if (!(window as any).hasInteracted) {
