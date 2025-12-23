@@ -280,7 +280,6 @@ export default class Match3Scene extends Phaser.Scene {
         const grid = this.getGridState();
         
         for (let col = 0; col < this.gridSize; col++) {
-            let missing = 0;
             // Count missing from bottom up?
             // Actually we just need to know how many are missing in the column to spawn that many on top
             // But we also need to know if there are gaps in the middle?
