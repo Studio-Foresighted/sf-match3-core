@@ -66,7 +66,7 @@ async function init() {
 
             // Update Logo Position
             if (game) {
-                game.onResize(app.stage.y, scale);
+                game.onResize(app.stage.y, scale, app.stage.x);
             }
 
             // Update HTML HUD Layout to match board position

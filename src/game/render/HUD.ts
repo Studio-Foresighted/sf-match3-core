@@ -37,22 +37,25 @@ export class HUD {
         this.container.addChild(this.logoSprite);
     }
 
-    updateLogoPosition(stageY: number, scale: number) {
+    updateLogoPosition(stageY: number, scale: number, stageX: number = 0) {
         if (!this.logoSprite) return;
 
         const isMobile = window.innerWidth <= 768;
         if (isMobile) {
-            // We want the logo to be at screen Y = 20px
-            // ScreenY = stageY + (LocalY * scale)
-            // LocalY = (ScreenY - stageY) / scale
+            // We want the logo to be at screen Y = 20px, Screen X = 20px (Top Left)
             const targetScreenY = 20;
+            const targetScreenX = 20;
+            
             const localY = (targetScreenY - stageY) / scale;
+            const localX = (targetScreenX - stageX) / scale;
             
             this.logoSprite.y = localY;
-            this.logoSprite.anchor.set(0.5, 0); // Anchor top-center
+            this.logoSprite.x = localX;
+            this.logoSprite.anchor.set(0, 0); // Anchor top-left
         } else {
             // Reset to desktop default
             this.logoSprite.y = -40;
+            this.logoSprite.x = (8 * 140) / 2;
             this.logoSprite.anchor.set(0.5, 1); // Anchor bottom-center
         }
     }

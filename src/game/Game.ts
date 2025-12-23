@@ -103,7 +103,7 @@ export class Game {
         }
     }
 
-    onResize(stageY: number, scale: number) {
-        this.hud.updateLogoPosition(stageY, scale);
+    onResize(stageY: number, scale: number, stageX: number) {
+        this.hud.updateLogoPosition(stageY, scale, stageX);
     }
 }

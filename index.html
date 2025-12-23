@@ -990,39 +990,62 @@
 
         /* Mobile UI Adjustments */
         .sc-stat-box-score, .sc-stat-box-moves {
-          transform: skewX(-9deg); /* Remove scale, keep skew */
-          width: 30%; /* Reduced from 44% to 30% (approx half of original visual weight) */
+          transform: skewX(-9deg);
+          width: 18%; /* Half of 30% approx, slightly larger for text safety */
           min-width: auto;
-          height: 35px;
+          height: 30px; /* Slightly shorter */
           bottom: 10px;
-          padding-left: 15px;
+          padding-left: 5px;
           padding-right: 5px;
+          justify-content: flex-start; /* Align content left */
         }
-        .sc-stat-box-score { left: 2%; }
-        .sc-stat-box-moves { right: 2%; }
+        
+        /* Align next to each other on the left */
+        .sc-stat-box-score { 
+          left: 10px; 
+        }
+        .sc-stat-box-moves { 
+          left: calc(10px + 18% + 10px); /* Left + Width + Gap */
+          right: auto; /* Reset right */
+        }
 
         .sc-stat-text {
-          font-size: 14px; /* Slightly smaller */
-          line-height: 35px;
-          margin-left: 5px;
+          font-size: 12px; /* Smaller font */
+          line-height: 30px;
+          margin-left: 25px; /* Space for icon */
         }
 
         .sc-stat-icon {
-          height: 30px; /* Smaller icon */
+          height: 25px; /* Smaller icon */
           top: -2px;
-          left: -10px;
+          left: -5px;
         }
 
+        /* Stars Bar: Align on the right (where moves used to be) */
         .sc-star-bar {
-          transform: skewX(-9deg) scale(1.0); /* Much smaller (was 1.8) */
-          bottom: 60px; /* Closer to score bars */
-          left: 10px; /* Align better */
+          transform: skewX(-9deg) scale(0.9);
+          bottom: 10px;
+          right: 10px;
+          left: auto; /* Reset left */
+          transform-origin: bottom right;
+          z-index: 20; /* Above avatar */
+        }
+
+        /* Avatar: Hug Top Right */
+        #sc-character-container {
+            top: 60px; /* Below menu button (approx) */
+            right: -40px; /* Hug right edge */
+            bottom: auto; /* Reset bottom */
+            height: 180px; /* Smaller height */
+            transform: scale(0.8); /* Scale down slightly */
+            transform-origin: top right;
         }
 
         .sc-menu-btn {
-          transform: scale(1.0) skewX(-9deg); /* Smaller menu button */
+          transform: scale(1.0) skewX(-9deg);
           top: 10px;
           right: 10px;
+          z-index: 6001; /* Ensure above everything */
         }
       }
 
