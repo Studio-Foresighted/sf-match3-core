@@ -91,8 +91,10 @@ export class IntroSequence {
         }
         
         // Wait for the HTML loader to finish its animation/fake duration
-        const onLoadingComplete = () => {
+        const onLoadingComplete = async () => {
             window.removeEventListener('loadingComplete', onLoadingComplete);
+            // Ensure fonts are loaded before creating text
+            await document.fonts.ready;
             this.setupLogoState();
         };
         window.addEventListener('loadingComplete', onLoadingComplete);
