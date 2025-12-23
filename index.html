@@ -1442,9 +1442,13 @@
         window.punchScoreHUD = function() {
           var scoreBox = document.querySelector('.sc-stat-box-score');
           if (scoreBox) {
+            var isMobile = window.innerWidth <= 768;
+            var normalScale = isMobile ? 1.0 : 2.0;
+            var punchScale = isMobile ? 1.1 : 2.2;
+
             // Reset animation
             scoreBox.style.transition = 'none';
-            scoreBox.style.transform = 'skewX(-9deg) scale(2.2)'; // Punch up
+            scoreBox.style.transform = 'skewX(-9deg) scale(' + punchScale + ')'; // Punch up
             
             // Force reflow
             void scoreBox.offsetWidth;
@@ -1452,7 +1456,7 @@
             // Animate back
             setTimeout(function() {
               scoreBox.style.transition = 'transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-              scoreBox.style.transform = 'skewX(-9deg) scale(2.0)'; // Back to normal
+              scoreBox.style.transform = 'skewX(-9deg) scale(' + normalScale + ')'; // Back to normal
             }, 50);
           }
         };
