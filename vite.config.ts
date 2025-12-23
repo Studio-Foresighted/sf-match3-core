@@ -1,14 +1,9 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
 
+// https://vite.dev/config/
 export default defineConfig({
-  base: './',
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-  },
+  plugins: [],
   server: {
-    port: 8081,
-    host: '0.0.0.0',
-    allowedHosts: true,
-  },
-});
+    allowedHosts: true
+  }
+})
