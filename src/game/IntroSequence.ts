@@ -131,11 +131,18 @@ export class IntroSequence {
 
         // Click to start text (optional but helpful)
         const style = new TextStyle({
-            fontFamily: 'Lilita One',
-            fontSize: 42, // Bigger
+            fontFamily: ['Lilita One', 'Arial', 'sans-serif'], // Robust fallback
+            fontSize: 36, 
             fill: '#ffffff',
-            fontWeight: 'bold', // Bold
-            letterSpacing: 2, // Stylized
+            fontWeight: 'bold',
+            align: 'center',
+            dropShadow: {
+                alpha: 0.5,
+                angle: Math.PI / 6,
+                blur: 4,
+                color: '#000000',
+                distance: 3,
+            },
         });
         this.clickToStartText = new Text({ text: 'CLICK TO START', style });
         this.clickToStartText.anchor.set(0.5);
