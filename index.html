@@ -105,6 +105,11 @@
         letter-spacing: 4px; /* Stylized spacing */
       }
 
+      /* --- REMOVED INIT OVERLAY --- */
+      #sc-init-overlay {
+        display: none !important;
+      }
+
       @keyframes flicker {
         10% { opacity: 0.9; }
         30% { opacity: 0.86; }
@@ -1338,14 +1343,9 @@
           // Mark as should show
           loader.dataset.shouldShow = 'true';
 
-          // Only actually show if interacted
-          if (window.hasInteracted) {
-            loader.style.display = 'block';
-            loader.style.opacity = '1';
-          } else {
-            // Show Init Overlay instead
-            if (initOverlay) initOverlay.style.display = 'flex';
-          }
+          // ALWAYS show loader immediately (removed init overlay dependency)
+          loader.style.display = 'block';
+          loader.style.opacity = '1';
 
           if (USE_FAKE_LOADING) {
             startTime = Date.now();
@@ -1354,6 +1354,74 @@
               requestAnimationFrame(updateLoader);
             }
           }
+        };
+
+        // --- PRELOADER ---
+        window.preloadAssets = function(callback) {
+            var assetsLoaded = 0;
+            var totalAssets = 0;
+            
+            // 1. Videos to preload
+            var videoList = [
+                '/assets/video/artworx-alchemy-intro.mp4',
+                '/assets/video/start-screen-loop-bg.mp4'
+                // Add mascot videos here if you have their paths
+            ];
+            
+            // 2. Audio to preload (Game Theme)
+            var audioList = [
+                '/assets/audio/music/match3-theme.mp3', // Example path, verify actual path
+                '/assets/audio/sfx/match.mp3' // Example
+            ];
+
+            // We will just count videos for now as audio decoding is complex to track perfectly with simple XHR
+            // But we can do it.
+            
+            totalAssets = videoList.length; 
+            
+            // Helper to update progress
+            function checkProgress() {
+                assetsLoaded++;
+                // We can report this to the main loader if we want detailed sub-progress
+                // For now, we just ensure they are ready before firing callback
+                if (assetsLoaded >= totalAssets) {
+                    if (callback) callback();
+                }
+            }
+
+            if (totalAssets === 0) {
+                if (callback) callback();
+                return;
+            }
+
+            // Load Videos
+            videoList.forEach(function(src) {
+                var vid = document.createElement('video');
+                vid.src = src;
+                vid.preload = 'auto';
+                vid.muted = true;
+                vid.playsInline = true;
+                vid.style.display = 'none';
+                document.body.appendChild(vid);
+                
+                // We consider it "loaded" enough when it can play through or has enough data
+                vid.oncanplaythrough = function() {
+                    // Store reference globally so we can reuse it
+                    if (!window.preloadedVideos) window.preloadedVideos = {};
+                    window.preloadedVideos[src] = vid;
+                    
+                    // Remove listener to avoid double counting
+                    vid.oncanplaythrough = null;
+                    checkProgress();
+                };
+                
+                vid.onerror = function() {
+                    console.warn("Failed to preload video:", src);
+                    checkProgress(); // Proceed anyway
+                };
+                
+                vid.load();
+            });
         };
 
         window.setLoadingProgress = function(p) {

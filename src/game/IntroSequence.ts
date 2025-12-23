@@ -83,10 +83,20 @@ export class IntroSequence {
         
         // Load them
         await Assets.load(assetsToLoad, (progress) => {
+            // Pixi Progress (0.0 - 0.8)
             if ((window as any).setLoadingProgress) {
-                (window as any).setLoadingProgress(progress);
+                (window as any).setLoadingProgress(progress * 0.8);
             }
         });
+        
+        // Now Preload HTML5 Videos (0.8 - 1.0)
+        if ((window as any).preloadAssets) {
+            await new Promise<void>((resolve) => {
+                (window as any).preloadAssets(() => {
+                    resolve();
+                });
+            });
+        }
         
         if ((window as any).setLoadingProgress) {
             (window as any).setLoadingProgress(1);
@@ -202,8 +212,15 @@ export class IntroSequence {
 
     setupIntro() {
         // Setup Intro Video
-        const introTexture = Assets.get('introVideo');
-        const introSource = introTexture.source.resource; 
+        // Check if we have a preloaded video
+        let introSource: HTMLVideoElement | null = null;
+        if ((window as any).preloadedVideos && (window as any).preloadedVideos['/assets/video/artworx-alchemy-intro.mp4']) {
+            introSource = (window as any).preloadedVideos['/assets/video/artworx-alchemy-intro.mp4'];
+        } else {
+            // Fallback to Pixi asset
+            const introTexture = Assets.get('introVideo');
+            introSource = introTexture.source.resource; 
+        }
         
         if (introSource && introSource.tagName === 'VIDEO') {
             introSource.muted = false; // Audio ON by default
@@ -211,6 +228,8 @@ export class IntroSequence {
             introSource.playsInline = true;
         }
 
+        // Create Sprite from the Video Source (Pixi can wrap an existing video element)
+        const introTexture = Texture.from(introSource as HTMLVideoElement);
         this.introVideoSprite = new Sprite(introTexture);
         this.introVideoSprite.anchor.set(0.5);
         this.container.addChild(this.introVideoSprite);
@@ -229,8 +248,13 @@ export class IntroSequence {
         this.resizeSprite(this.introVideoSprite, true, true); // true = isVideo, true = limit
 
         // Setup Loop Video (Hidden)
-        const loopTexture = Assets.get('loopVideo');
-        const loopSource = loopTexture.source.resource;
+        let loopSource: HTMLVideoElement | null = null;
+        if ((window as any).preloadedVideos && (window as any).preloadedVideos['/assets/video/start-screen-loop-bg.mp4']) {
+            loopSource = (window as any).preloadedVideos['/assets/video/start-screen-loop-bg.mp4'];
+        } else {
+            const loopTexture = Assets.get('loopVideo');
+            loopSource = loopTexture.source.resource;
+        }
         
         if (loopSource && loopSource.tagName === 'VIDEO') {
             loopSource.loop = true;
@@ -238,6 +262,7 @@ export class IntroSequence {
             loopSource.playsInline = true;
         }
 
+        const loopTexture = Texture.from(loopSource as HTMLVideoElement);
         this.loopVideoSprite = new Sprite(loopTexture);
         this.loopVideoSprite.anchor.set(0.5);
         this.loopVideoSprite.alpha = 0;
