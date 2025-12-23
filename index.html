@@ -1893,6 +1893,19 @@
         let isMuted = false; // Global mute (deprecated/video only)
         let isMusicMuted = false;
         let isSfxMuted = false;
+        let audioWatchdogInterval = null;
+
+        function startAudioWatchdog() {
+            if (audioWatchdogInterval) clearInterval(audioWatchdogInterval);
+            audioWatchdogInterval = setInterval(() => {
+                if (currentBGM && !isMusicMuted) {
+                    if (currentBGM.paused) {
+                        console.log("Audio Watchdog: Restarting BGM...");
+                        currentBGM.play().catch(e => console.log("Audio Watchdog blocked:", e));
+                    }
+                }
+            }, 1000);
+        }
 
         function playSfx(key, index = -1) {
             if (isSfxMuted) return;
@@ -1966,6 +1979,8 @@
                     if (!isMusicMuted && currentBGM.paused) {
                         currentBGM.play().catch(e => console.log("Autoplay blocked", e));
                     }
+                    // Start Watchdog
+                    startAudioWatchdog();
                     break;
                 case 'intro_start':
                     if (currentBGM) {
@@ -2044,7 +2059,10 @@
                     playSfx('star2');
                     break;
                 case 'win':
-                    if (currentBGM) currentBGM.pause();
+                    if (currentBGM) {
+                        currentBGM.pause();
+                        currentBGM = null; // Stop watchdog from restarting it
+                    }
                     playSfx('victory');
                     break;
             }
