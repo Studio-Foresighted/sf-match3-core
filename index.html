@@ -248,8 +248,8 @@
       /* Container to handle the scaling */
       .cs-card-container {
         position: relative;
-        /* Default Mobile Scale */
-        transform: scale(1.2);
+        /* Default Mobile Scale - Reduced by ~10% from 1.2 to 1.08 */
+        transform: scale(1.08);
       }
 
       /* Desktop Scale: Fixed large scale */
@@ -1821,6 +1821,11 @@
                     break;
                 case 'intro_start':
                     if (currentBGM) {
+                        // Ensure it's playing (fix for mobile pausing BGM when video starts)
+                        if (currentBGM.paused && !isMusicMuted) {
+                            currentBGM.play().catch(e => {});
+                        }
+                        
                         // Ease down to 50%
                         let vol = currentBGM.volume;
                         const fade = setInterval(() => {
