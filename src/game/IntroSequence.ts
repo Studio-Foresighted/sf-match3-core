@@ -266,13 +266,20 @@ export class IntroSequence {
                 console.warn("Could not reset video time", e);
             }
             
+            // Try to play immediately
             const playPromise = introSource.play();
             if (playPromise !== undefined) {
                 playPromise.then(() => {
-                    // Video started successfully unmuted
+                    // Video started successfully
                 }).catch((e: any) => {
-                    console.warn("Autoplay blocked unmuted, trying to play anyway (browser might block)", e);
+                    console.warn("Autoplay blocked, waiting for interaction", e);
+                    // If blocked, we wait for the global interaction (init overlay) or a specific tap
+                    // Since we added the global unlock in index.html, this might just work if called after that.
+                    // If this is called BEFORE the init overlay click, it will fail.
+                    // But IntroSequence is created AFTER init overlay click usually? 
+                    // No, IntroSequence is created immediately.
                     
+                    // If we are blocked, add a one-time listener to the container
                     const startOnInteraction = () => {
                         introSource.play();
                         this.container.off('pointerdown', startOnInteraction);

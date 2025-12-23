@@ -1292,6 +1292,36 @@
         if (initBtn) {
             initBtn.addEventListener('click', function() {
                 window.hasInteracted = true;
+                
+                // --- MOBILE AUDIO UNLOCK ---
+                // Unlock AudioContext on first interaction for mobile
+                var AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) {
+                    // We don't need to create a new one if Pixi/Howler already has one, 
+                    // but we can try to resume the global one if we can access it, 
+                    // or just create a dummy one to trigger the permission.
+                    // However, PixiJS Sound usually handles this if we interact.
+                    // Let's try to resume the context used by the game if possible, 
+                    // or just rely on the fact that this click event is propagating.
+                    
+                    // Better approach: Resume the AudioContext that Pixi/Game uses.
+                    // Since we don't have direct access to the game instance here easily,
+                    // we can try to resume the global context if it exists on window (some libs put it there)
+                    // or just create a short silent buffer to "warm up" the audio subsystem.
+                    
+                    var ctx = new AudioContext();
+                    if (ctx.state === 'suspended') {
+                        ctx.resume();
+                    }
+                    // Play silent buffer
+                    var buffer = ctx.createBuffer(1, 1, 22050);
+                    var source = ctx.createBufferSource();
+                    source.buffer = buffer;
+                    source.connect(ctx.destination);
+                    source.start(0);
+                }
+                // ---------------------------
+
                 if (window.playAudioEvent) window.playAudioEvent('init');
                 if (initOverlay) initOverlay.style.display = 'none';
                 
