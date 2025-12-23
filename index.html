@@ -1741,6 +1741,14 @@
             }
         };
 
+        // Preload Audio for Mobile
+        AUDIO.bgmMain.preload = 'auto';
+        AUDIO.bgmGame.forEach(a => a.preload = 'auto');
+        Object.values(AUDIO.sfx).forEach(s => {
+            if (Array.isArray(s)) s.forEach(a => a.preload = 'auto');
+            else s.preload = 'auto';
+        });
+
         AUDIO.bgmMain.loop = true;
         AUDIO.bgmGame.forEach(a => a.loop = true);
 

@@ -436,7 +436,19 @@ export class IntroSequence {
     resize() {
         if (this.background) this.resizeSprite(this.background);
         if (this.introVideoSprite) {
-            this.resizeSprite(this.introVideoSprite, true, true); // Limit resolution for intro
+            // Mobile Check
+            const isMobile = this.app.screen.width < 768;
+            
+            if (isMobile) {
+                // Mobile: 90vh height, maintain aspect ratio
+                const targetHeight = this.app.screen.height * 0.9;
+                const scale = targetHeight / this.introVideoSprite.texture.height;
+                this.introVideoSprite.scale.set(scale);
+                this.introVideoSprite.x = this.app.screen.width / 2;
+                this.introVideoSprite.y = this.app.screen.height / 2;
+            } else {
+                this.resizeSprite(this.introVideoSprite, true, true); // Desktop: Cover/Limit
+            }
             
             // Update Frame
             if (this.introFrame) {
