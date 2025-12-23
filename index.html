@@ -147,7 +147,7 @@
 
         /* Mobile UI Adjustments */
         .sc-stat-box-score, .sc-stat-box-moves {
-          transform: skewX(-9deg) scale(1.5); /* Smaller on mobile */
+          transform: skewX(-9deg) scale(0.75); /* 50% of the original 1.5 scale */
           bottom: 10px;
         }
         .sc-stat-box-score { left: -10px; }
@@ -1821,9 +1821,12 @@
         window.playAudioEvent = function(event) {
             switch(event) {
                 case 'init': // Called on first user interaction
-                    if (!currentBGM && !isMusicMuted) {
+                    if (!currentBGM) {
                         currentBGM = AUDIO.bgmMain;
                         currentBGM.volume = 1.0;
+                    }
+                    // Always try to play if paused, even if we set it before
+                    if (!isMusicMuted && currentBGM.paused) {
                         currentBGM.play().catch(e => console.log("Autoplay blocked", e));
                     }
                     break;

@@ -155,12 +155,12 @@ export class IntroSequence {
         // Make text interactive for mobile touch
         this.clickToStartText.eventMode = 'static';
         this.clickToStartText.cursor = 'pointer';
-        this.clickToStartText.once('pointerdown', () => this.startVideoSequence());
+        this.clickToStartText.on('pointertap', () => this.startVideoSequence());
 
         // Interaction to start video (background/container)
         this.container.eventMode = 'static';
         this.container.cursor = 'pointer';
-        this.container.once('pointerdown', () => this.startVideoSequence());
+        this.container.on('pointertap', () => this.startVideoSequence());
         
         this.resize();
     }
@@ -434,11 +434,23 @@ export class IntroSequence {
     }
 
     resize() {
-        if (this.background) this.resizeSprite(this.background);
+        // Mobile Check
+        const isMobile = this.app.screen.width < 768;
+
+        if (this.background) {
+            if (isMobile) {
+                 // Mobile: 90vh height, maintain aspect ratio
+                 const targetHeight = this.app.screen.height * 0.9;
+                 const scale = targetHeight / this.background.texture.height;
+                 this.background.scale.set(scale);
+                 this.background.x = this.app.screen.width / 2;
+                 this.background.y = this.app.screen.height / 2;
+            } else {
+                this.resizeSprite(this.background);
+            }
+        }
+
         if (this.introVideoSprite) {
-            // Mobile Check
-            const isMobile = this.app.screen.width < 768;
-            
             if (isMobile) {
                 // Mobile: 90vh height, maintain aspect ratio
                 const targetHeight = this.app.screen.height * 0.9;
