@@ -497,8 +497,10 @@ export class IntroSequence {
                 this.introVideoSprite.x = this.app.screen.width / 2;
                 this.introVideoSprite.y = this.app.screen.height / 2;
             } else {
-                // Desktop: 85vh height (Max VH instead of Cover)
-                const targetHeight = this.app.screen.height * 0.85;
+                // Desktop: 80vh height, BUT max 1080px height
+                const vhHeight = this.app.screen.height * 0.8;
+                const targetHeight = Math.min(1080, vhHeight);
+                
                 const scale = targetHeight / this.introVideoSprite.texture.height;
                 this.introVideoSprite.scale.set(scale);
                 this.introVideoSprite.x = this.app.screen.width / 2;
