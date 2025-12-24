@@ -506,7 +506,10 @@ export class IntroSequence {
                 const scale = targetHeight / this.introVideoSprite.texture.height;
                 this.introVideoSprite.scale.set(scale);
                 this.introVideoSprite.x = this.app.screen.width / 2;
-                this.introVideoSprite.y = this.app.screen.height / 2;
+                
+                // Move up: Reduce top margin by 50% (Visual "move up a bit")
+                const topMargin = (this.app.screen.height - targetHeight) / 2;
+                this.introVideoSprite.y = (topMargin * 0.5) + (targetHeight / 2);
             }
             
             // Update Frame & Shadow
