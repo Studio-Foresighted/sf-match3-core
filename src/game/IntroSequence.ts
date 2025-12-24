@@ -11,6 +11,7 @@ export class IntroSequence {
     private startButton: Sprite | null = null;
 
     private introFrame: Graphics | null = null;
+    private introShadow: Graphics | null = null;
     private isMuted: boolean = false;
 
     private logoSprite: Sprite | null = null;
@@ -230,7 +231,13 @@ export class IntroSequence {
         this.introVideoSprite.anchor.set(0.5);
         this.container.addChild(this.introVideoSprite);
         
-        // Add Frame for Intro Video
+        // Add Shadow (Behind Video)
+        this.introShadow = new Graphics();
+        // Insert before video sprite
+        const videoIndex = this.container.getChildIndex(this.introVideoSprite);
+        this.container.addChildAt(this.introShadow, videoIndex);
+
+        // Add Frame for Intro Video (On Top)
         this.introFrame = new Graphics();
         this.container.addChild(this.introFrame);
         
@@ -335,6 +342,9 @@ export class IntroSequence {
         }
         if (this.introFrame) {
             gsap.to(this.introFrame, { alpha: 0, duration: 0.5 });
+        }
+        if (this.introShadow) {
+            gsap.to(this.introShadow, { alpha: 0, duration: 0.5 });
         }
 
         const loopSource = this.loopVideoSprite.texture.source.resource;
@@ -490,18 +500,21 @@ export class IntroSequence {
                 this.resizeSprite(this.introVideoSprite, true, true); // Desktop: Cover/Limit
             }
             
-            // Update Frame
+            // Update Frame & Shadow
+            const w = this.introVideoSprite.width;
+            const h = this.introVideoSprite.height;
+            const x = this.introVideoSprite.x - w/2;
+            const y = this.introVideoSprite.y - h/2;
+
+            if (this.introShadow) {
+                this.introShadow.clear();
+                // 1. Drop Shadow (Offset & Semi-transparent) - Now behind video
+                this.introShadow.rect(x + 20, y + 20, w, h);
+                this.introShadow.fill({ color: 0x000000, alpha: 0.5 });
+            }
+
             if (this.introFrame) {
                 this.introFrame.clear();
-                const w = this.introVideoSprite.width;
-                const h = this.introVideoSprite.height;
-                const x = this.introVideoSprite.x - w/2;
-                const y = this.introVideoSprite.y - h/2;
-
-                // 1. Drop Shadow (Offset & Semi-transparent)
-                this.introFrame.rect(x + 20, y + 20, w, h);
-                this.introFrame.fill({ color: 0x000000, alpha: 0.5 });
-
                 // 2. Glassy Border Effect
                 // Main Border (Thick, low opacity white)
                 this.introFrame.rect(x, y, w, h);
