@@ -474,16 +474,8 @@ export class IntroSequence {
         const isMobile = this.app.screen.width < 768;
 
         if (this.background) {
-            if (isMobile) {
-                 // Mobile: 90vh height, maintain aspect ratio
-                 const targetHeight = this.app.screen.height * 0.9;
-                 const scale = targetHeight / this.background.texture.height;
-                 this.background.scale.set(scale);
-                 this.background.x = this.app.screen.width / 2;
-                 this.background.y = this.app.screen.height / 2;
-            } else {
-                this.resizeSprite(this.background);
-            }
+            // Always cover/full height for background
+            this.resizeSprite(this.background);
         }
 
         if (this.introVideoSprite) {
