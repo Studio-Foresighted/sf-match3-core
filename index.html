@@ -440,7 +440,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: row;
-        transform: skewX(-9deg) scale(2.0); /* x2 Size */
+        transform: skewX(-9deg) scale(1.5); /* x1.2 Size (Desktop) */
         transform-origin: bottom right; /* Grow outwards to the left */
         padding: 0 15px;
         border: 2px solid #333;
@@ -460,7 +460,7 @@
         align-items: center;
         justify-content: center;
         flex-direction: row;
-        transform: skewX(-9deg) scale(2.0); /* x2 Size */
+        transform: skewX(-9deg) scale(1.5); /* x1.2 Size (Desktop) */
         transform-origin: bottom left; /* Grow outwards to the right */
         padding: 0 15px;
         border: 2px solid #333;
@@ -469,11 +469,18 @@
         z-index: 10; /* Ensure above video */
       }
 
+      @media (min-width: 769px) {
+        .sc-stat-box-moves {
+            right: 55px; /* Moved left by ~half width */
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+      }
+
       /* --- CHARACTER VIDEO --- */
       #sc-character-container {
         position: absolute;
-        bottom: 55px; /* Sit on top of moves bar */
-        right: -140px; /* Align with moves bar which extends far right */
+        top: 0; /* Sit on top of moves bar */
+        right: 40vw; /* Align with moves bar which extends far right */
         width: fit-content; /* Wrap content for grid */
         height: 380px; /* Increased size */
         border: 4px solid #333;
@@ -515,10 +522,8 @@
 
       @media (max-width: 768px) {
         #sc-character-container {
-            width: fit-content;
             height: 200px;
             bottom: 50px;
-            right: -60px;
             border-width: 2px;
         }
         /* Mobile Circle Override */
@@ -1520,9 +1525,21 @@
         window.showHUD = function(show) {
           if (hud) hud.style.display = show ? 'block' : 'none';
           
-          // Start Character Video Sequence when HUD is shown (Game Start)
-          if (show && window.resetCharacterVideo) {
-             window.resetCharacterVideo();
+          // Handle Character Container Fade-in
+          var charContainer = document.getElementById('sc-character-container');
+          if (show) {
+              if (charContainer) {
+                  charContainer.style.opacity = '0';
+                  setTimeout(function() {
+                      charContainer.style.opacity = '1';
+                  }, 1000);
+              }
+              // Start Character Video Sequence when HUD is shown (Game Start)
+              if (window.resetCharacterVideo) {
+                 window.resetCharacterVideo();
+              }
+          } else {
+              if (charContainer) charContainer.style.opacity = '0';
           }
         };
 
@@ -1536,8 +1553,8 @@
           var scoreBox = document.querySelector('.sc-stat-box-score');
           if (scoreBox) {
             var isMobile = window.innerWidth <= 768;
-            var normalScale = isMobile ? 1.0 : 2.0;
-            var punchScale = isMobile ? 1.1 : 2.2;
+            var normalScale = isMobile ? 1.0 : 1.5;
+            var punchScale = isMobile ? 1.1 : 1.8;
 
             // Reset animation
             scoreBox.style.transition = 'none';
@@ -1574,6 +1591,48 @@
             topBar.style.width = width + 'px';
             // We do NOT scale the container, as that messes up the corner anchoring.
             // Instead, we scale the individual boxes via CSS.
+          }
+
+          // Desktop: Position Character Container relative to board (Top Right)
+          var charContainer = document.getElementById('sc-character-container');
+          if (charContainer) {
+            if (window.innerWidth > 768) {
+                // Align with Moves Bar (Top Right)
+                // Moves bar is at right: -20px of topBar.
+                // We want character to be behind it.
+                
+                // Responsive Scaling for Desktop
+                // Base size: 380px height at scale 1.0
+                // Base offsets: Left -100, Top -320 at scale 1.0
+                
+                var safeScale = scale || 1;
+                var scaledHeight = 380 * safeScale;
+                var scaledLeftOffset = 100 * safeScale;
+                var scaledTopOffset = 320 * safeScale;
+
+                charContainer.style.height = scaledHeight + 'px';
+                
+                // Fix for Circle Mode: Force width to match height to prevent skewing
+                if (charContainer.classList.contains('sc-video-circle')) {
+                    charContainer.style.setProperty('width', scaledHeight + 'px', 'important');
+                } else {
+                    charContainer.style.removeProperty('width');
+                }
+
+                charContainer.style.position = 'absolute';
+                charContainer.style.left = (x + width - scaledLeftOffset) + 'px'; 
+                charContainer.style.top = (y - scaledTopOffset) + 'px'; 
+                charContainer.style.bottom = 'auto';
+                charContainer.style.right = 'auto';
+            } else {
+                // Mobile: Reset to CSS defaults
+                charContainer.style.height = ''; // Reset height
+                charContainer.style.removeProperty('width'); // Reset width
+                charContainer.style.left = '';
+                charContainer.style.top = '';
+                charContainer.style.bottom = '';
+                charContainer.style.right = '';
+            }
           }
         };
 

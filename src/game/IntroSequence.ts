@@ -497,7 +497,12 @@ export class IntroSequence {
                 this.introVideoSprite.x = this.app.screen.width / 2;
                 this.introVideoSprite.y = this.app.screen.height / 2;
             } else {
-                this.resizeSprite(this.introVideoSprite, true, true); // Desktop: Cover/Limit
+                // Desktop: 85vh height (Max VH instead of Cover)
+                const targetHeight = this.app.screen.height * 0.85;
+                const scale = targetHeight / this.introVideoSprite.texture.height;
+                this.introVideoSprite.scale.set(scale);
+                this.introVideoSprite.x = this.app.screen.width / 2;
+                this.introVideoSprite.y = this.app.screen.height / 2;
             }
             
             // Update Frame & Shadow
