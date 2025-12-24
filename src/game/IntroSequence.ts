@@ -490,16 +490,16 @@ export class IntroSequence {
 
         if (this.introVideoSprite) {
             if (isMobile) {
-                // Mobile: 80vh height, maintain aspect ratio
-                const targetHeight = this.app.screen.height * 0.8;
+                // Mobile: 68vh height (reduced by 15% from 80vh)
+                const targetHeight = this.app.screen.height * 0.68;
                 const scale = targetHeight / this.introVideoSprite.texture.height;
                 this.introVideoSprite.scale.set(scale);
                 this.introVideoSprite.x = this.app.screen.width / 2;
                 this.introVideoSprite.y = this.app.screen.height / 2;
             } else {
-                // Desktop: 80vh height, BUT max 1080px height
-                const vhHeight = this.app.screen.height * 0.8;
-                const targetHeight = Math.min(1080, vhHeight);
+                // Desktop: 68vh height, BUT max 918px height (reduced by 15% from 1080)
+                const vhHeight = this.app.screen.height * 0.68;
+                const targetHeight = Math.min(918, vhHeight);
                 
                 const scale = targetHeight / this.introVideoSprite.texture.height;
                 this.introVideoSprite.scale.set(scale);
