@@ -495,20 +495,21 @@ export class IntroSequence {
                 this.introFrame.clear();
                 const w = this.introVideoSprite.width;
                 const h = this.introVideoSprite.height;
-                // Draw border
-                this.introFrame.rect(
-                    this.introVideoSprite.x - w/2, 
-                    this.introVideoSprite.y - h/2, 
-                    w, h
-                );
-                this.introFrame.stroke({ width: 10, color: 0xffd700 }); // Gold border
-                // Shadow
-                this.introFrame.rect(
-                    this.introVideoSprite.x - w/2 - 5, 
-                    this.introVideoSprite.y - h/2 - 5, 
-                    w + 10, h + 10
-                );
-                this.introFrame.stroke({ width: 2, color: 0x000000, alpha: 0.5 });
+                const x = this.introVideoSprite.x - w/2;
+                const y = this.introVideoSprite.y - h/2;
+
+                // 1. Drop Shadow (Offset & Semi-transparent)
+                this.introFrame.rect(x + 20, y + 20, w, h);
+                this.introFrame.fill({ color: 0x000000, alpha: 0.5 });
+
+                // 2. Glassy Border Effect
+                // Main Border (Thick, low opacity white)
+                this.introFrame.rect(x, y, w, h);
+                this.introFrame.stroke({ width: 16, color: 0xffffff, alpha: 0.15 });
+
+                // Inner Highlight (Thin, higher opacity)
+                this.introFrame.rect(x, y, w, h);
+                this.introFrame.stroke({ width: 2, color: 0xffffff, alpha: 0.5 });
             }
         }
         if (this.loopVideoSprite) this.resizeSprite(this.loopVideoSprite, true, false); // Full resolution for loop
