@@ -75,11 +75,12 @@ export class IntroSequence {
         // Load videos, button, and logo
         Assets.add({ alias: 'introVideo', src: '/assets/video/artworx-alchemy-intro.mp4' });
         Assets.add({ alias: 'loopVideo', src: '/assets/video/start-screen-loop-bg.mp4' });
+        Assets.add({ alias: 'loopVideoMobile', src: '/assets/video/start-screen-loop-bg-mobile.mp4' });
         Assets.add({ alias: 'startButton', src: '/assets/start-button.png' });
         Assets.add({ alias: 'logo', src: '/assets/artworx-alchemy-trans.png' });
         Assets.add({ alias: 'character', src: '/assets/red-alchemist-jump-skirt-nowhite5.png' }); // Preload character
 
-        const assetsToLoad = ['introVideo', 'loopVideo', 'startButton', 'logo', 'character'];
+        const assetsToLoad = ['introVideo', 'loopVideo', 'loopVideoMobile', 'startButton', 'logo', 'character'];
         
         // Load them
         await Assets.load(assetsToLoad, (progress) => {
@@ -243,11 +244,15 @@ export class IntroSequence {
         this.resizeSprite(this.introVideoSprite, true, true); // true = isVideo, true = limit
 
         // Setup Loop Video (Hidden)
+        const isMobile = this.app.screen.width < 768;
+        const loopKey = isMobile ? '/assets/video/start-screen-loop-bg-mobile.mp4' : '/assets/video/start-screen-loop-bg.mp4';
+        const loopAssetAlias = isMobile ? 'loopVideoMobile' : 'loopVideo';
+
         let loopSource: HTMLVideoElement | null = null;
-        if ((window as any).preloadedVideos && (window as any).preloadedVideos['/assets/video/start-screen-loop-bg.mp4']) {
-            loopSource = (window as any).preloadedVideos['/assets/video/start-screen-loop-bg.mp4'];
+        if ((window as any).preloadedVideos && (window as any).preloadedVideos[loopKey]) {
+            loopSource = (window as any).preloadedVideos[loopKey];
         } else {
-            const loopTexture = Assets.get('loopVideo');
+            const loopTexture = Assets.get(loopAssetAlias);
             loopSource = loopTexture.source.resource;
         }
         
@@ -483,8 +488,8 @@ export class IntroSequence {
 
         if (this.introVideoSprite) {
             if (isMobile) {
-                // Mobile: 90vh height, maintain aspect ratio
-                const targetHeight = this.app.screen.height * 0.9;
+                // Mobile: 80vh height, maintain aspect ratio
+                const targetHeight = this.app.screen.height * 0.8;
                 const scale = targetHeight / this.introVideoSprite.texture.height;
                 this.introVideoSprite.scale.set(scale);
                 this.introVideoSprite.x = this.app.screen.width / 2;
