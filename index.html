@@ -473,6 +473,16 @@
         .sc-stat-box-moves {
             right: 55px; /* Moved left by ~half width */
             background-color: rgba(0, 0, 0, 0.6);
+            min-width: 75px; /* 50% of 150px */
+            width: 75px;
+        }
+        /* Hide text if it overflows or adjust font size */
+        .sc-stat-box-moves .sc-stat-text {
+            font-size: 18px;
+            margin-left: 10px;
+        }
+        .sc-stat-box-moves .sc-stat-icon {
+            left: -10px; /* Adjust icon position */
         }
       }
 
